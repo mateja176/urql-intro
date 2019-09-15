@@ -1,10 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import { createClient, Provider } from 'urql';
 import App from './App';
+import './index.css';
 import * as serviceWorker from './serviceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const client = createClient({
+  url: 'https://api.github.com/graphql',
+  fetchOptions: {
+    headers: {
+      authorization: `bearer ${process.env.REACT_APP_GITHUB_API_TOKEN}`,
+    },
+  },
+});
+
+ReactDOM.render(
+  <Provider value={client}>
+    <App />
+  </Provider>,
+  document.getElementById('root'),
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
